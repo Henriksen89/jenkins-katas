@@ -83,7 +83,7 @@ pipeline {
           branch 'dev/'
         }
       }
-      steps{
+      steps {
         unstash 'code'
         sh 'ci/component-test.sh'
       }
