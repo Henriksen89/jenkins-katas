@@ -67,7 +67,8 @@ pipeline {
       steps {
         unstash 'code' //unstash the repository code
         sh 'ci/build-docker.sh'
-        pushIfMaster()
+        sh 'echo "$DOCKERCREDS_PSW" | docker login -u "$DOCKERCREDS_USR" --password-stdin'
+        sh 'ci/push-docker.sh'
       }
     }
 
@@ -77,16 +78,15 @@ pipeline {
           skipDefaultCheckout(true)
         }
       }
+      when {
+        not {
+          branch 'dev/'
+        }
+      }
       steps{
         unstash 'code'
         sh 'ci/component-test.sh'
       }
-    }
-  }
-  void pushIfMaster() {
-    if (BRANCH_NAME=="master"){
-      sh 'echo "$DOCKERCREDS_PSW" | docker login -u "$DOCKERCREDS_USR" --password-stdin'
-      sh 'ci/push-docker.sh'
     }
   }
 }
