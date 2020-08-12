@@ -1,6 +1,13 @@
 pipeline {
   agent any
   stages {
+    stage('clone down') {
+      steps{
+        stash excludes: '.git', name: 'code'
+      }
+    }
+  }
+  stages {
     stage('Parallel execution') {
       parallel {
         stage('say hello') {
@@ -10,6 +17,10 @@ pipeline {
         }
 
         stage('build app') {
+          options{
+            skipDefaultCheckout true
+          }
+          
           agent {
             docker {
               image 'gradle:jdk11'
@@ -17,12 +28,13 @@ pipeline {
 
           }
           steps {
+            unstash "code"
             sh 'ci/build-app.sh'
             archiveArtifacts 'app/build/libs/'
             sh "ls"
             deleteDir()
             sh "ls"
-            sh "ls"
+
           }
         }
 
