@@ -51,8 +51,8 @@ pipeline {
       }
     }
   }
-      stage('push docker') {
-    environment {
+    stage('push docker') {
+      environment {
           DOCKERCREDS = credentials('docker_login') //use the credentials just created in this stage
     }
         steps {
