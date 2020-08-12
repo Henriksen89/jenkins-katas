@@ -28,6 +28,7 @@ pipeline {
             sh 'ls'
             sh 'ci/build-app.sh'
             archiveArtifacts 'app/build/libs/'
+            stash excludes: '.git/', name: 'allmyfilesyolo'
             deleteDir()
             sh 'ls'
           }
