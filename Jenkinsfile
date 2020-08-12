@@ -50,11 +50,11 @@ pipeline {
         }
       }
     }
-
+  }
       stage('push docker') {
-          environment {
+    environment {
           DOCKERCREDS = credentials('docker_login') //use the credentials just created in this stage
-          }
+    }
         steps {
           unstash 'code' //unstash the repository code
           sh 'ci/build-docker.sh'
@@ -62,5 +62,4 @@ pipeline {
           sh 'ci/push-docker.sh'
         }
       }
-  }
 }
