@@ -61,10 +61,6 @@ pipeline {
       environment {
         DOCKERCREDS = credentials('docker_login') //use the credentials just created in this stage
       }
-      when {
-        beforeAgent true
-        branch 'master'
-      }
         options {
             skipDefaultCheckout()
         }
@@ -74,6 +70,16 @@ pipeline {
         sh 'echo "$DOCKERCREDS_PSW" | docker login -u "$DOCKERCREDS_USR" --password-stdin' //login to docker hub with the credentials above
         sh 'ci/push-docker.sh'
       }
-    } 
+    }
+
+    stage('component-test') {
+      when {
+        beforeAgent true
+        branch 'master'
+      }
+      steps{
+        sh 'ci/component-test.sh'
+      }
+    }
   }
 }
