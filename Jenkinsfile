@@ -22,6 +22,7 @@ pipeline {
             sh "ls"
             deleteDir()
             sh "ls"
+            sh "ls"
           }
         }
 
